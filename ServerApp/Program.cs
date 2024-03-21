@@ -13,10 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Database"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(name: "TestingDatabase"));
 });
 builder.Services.AddScoped<OsobaService>();
-builder.Services.AddScoped<GetAllService>();
+/*builder.Services.AddScoped<GetAllService>();*/
 
 var app = builder.Build();
 

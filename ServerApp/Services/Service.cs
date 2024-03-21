@@ -1,4 +1,6 @@
-﻿namespace ServerApp.Services
+﻿using ServerApp.Models;
+
+namespace ServerApp.Services
 {
     public abstract class Service
     {

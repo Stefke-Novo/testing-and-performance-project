@@ -9,7 +9,7 @@ namespace ServerApp.Config
         public void Configure(EntityTypeBuilder<Mesto> builder)
         {
             builder.HasMany<Prebivaliste>().WithOne().HasForeignKey(p=>p.M).OnDelete(DeleteBehavior.Restrict);
-            builder.HasMany<Osoba>().WithOne().HasForeignKey(o => o.RodnoMesto).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany<Osoba>().WithOne().HasForeignKey(o=>o.RodnoMesto).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

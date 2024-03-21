@@ -37,7 +37,7 @@ namespace ServerApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ime = table.Column<string>(type: "nvarchar(33)", maxLength: 33, nullable: false),
                     prezime = table.Column<string>(type: "nvarchar(33)", maxLength: 33, nullable: false),
-                    datum_rodjenja = table.Column<DateOnly>(type: "date", nullable: false),
+                    datum_rodjenja = table.Column<DateTime>(type: "date", nullable: false),
                     starost = table.Column<int>(type: "int", nullable: false, computedColumnSql: "datediff(month,[datum_rodjenja],getdate())"),
                     jmbg = table.Column<string>(type: "nchar(13)", maxLength: 13, nullable: false),
                     broj_telefona = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
@@ -46,12 +46,12 @@ namespace ServerApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_osoba", x => x.o);
-                    table.ForeignKey(
+                    /*table.ForeignKey(
                         name: "FK_osoba_mesto_rodno_mesto",
                         column: x => x.rodno_mesto,
                         principalTable: "mesto",
                         principalColumn: "m",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Restrict);*/
                 });
 
             

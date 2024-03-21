@@ -12,8 +12,8 @@ using ServerApp;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240309003259_InsertOsobaConstitionSP")]
-    partial class InsertOsobaConstitionSP
+    [Migration("20240309182956_DeleteOsobaSP")]
+    partial class DeleteOsobaSP
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -12,8 +12,8 @@ using ServerApp;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240307230131_InsertPrebivalisteSP")]
-    partial class InsertPrebivalisteSP
+    [Migration("20240309173653_UpdateOsobaSP")]
+    partial class UpdateOsobaSP
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,8 +69,8 @@ namespace ServerApp.Migrations
                         .HasColumnType("nvarchar(18)")
                         .HasColumnName("broj_telefona");
 
-                    b.Property<DateTime>("DatumRodjenja")
-                        .HasColumnType("datetime2")
+                    b.Property<DateOnly>("DatumRodjenja")
+                        .HasColumnType("date")
                         .HasColumnName("datum_rodjenja");
 
                     b.Property<string>("Ime")

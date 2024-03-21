@@ -48,7 +48,7 @@ namespace ServerApp.Migrations
 
                     b.HasKey("M");
 
-                    b.ToTable("mesto");
+                    b.ToTable("mesto", (string)null);
                 });
 
             modelBuilder.Entity("ServerApp.Models.Osoba", b =>
@@ -108,7 +108,7 @@ namespace ServerApp.Migrations
 
                     b.HasIndex("RodnoMesto");
 
-                    b.ToTable("osoba");
+                    b.ToTable("osoba", (string)null);
                 });
 
             modelBuilder.Entity("ServerApp.Models.Prebivaliste", b =>
@@ -125,7 +125,7 @@ namespace ServerApp.Migrations
 
                     b.HasIndex("M");
 
-                    b.ToTable("prebivaliste");
+                    b.ToTable("prebivaliste", (string)null);
                 });
 
             modelBuilder.Entity("ServerApp.Models.Osoba", b =>

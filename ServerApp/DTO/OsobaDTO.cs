@@ -1,33 +1,28 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using ServerApp.Config;
-using System.ComponentModel.DataAnnotations;
+﻿using ServerApp.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
-namespace ServerApp.Models
+namespace ServerApp.DTO
 {
-    [Table("osoba")]
-    [EntityTypeConfiguration(typeof(OsobaConfiguration))]
-    [Index(nameof(O),IsUnique =true)]
-    [Index(nameof(Jmbg), IsUnique = true)]
-    public class Osoba
+    [Keyless]
+    public class OsobaDTO
     {
         [Column("o"), Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonPropertyName("o")]
-        [Key]
         public long O { get; set; } = default;
-        [Column("ime"), 
+        [Column("ime"),
         MaxLength(33),
         RegularExpression(@"^[АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШ][абвгдђежзијклљмнњопрстћуфхцчџш]+$",
-            ErrorMessage = "ERROR: Field ime must be typed in Serbian Cyrilic script. First letter must be uppercase while all other must be lowercase."), 
+            ErrorMessage = "ERROR: Field ime must be typed in Serbian Cyrilic script. First letter must be uppercase while all other must be lowercase."),
         Required,
         JsonPropertyName("ime")]
         public string Ime { get; set; } = string.Empty;
 
-        [Column("prezime"), 
-            MaxLength(33), 
+        [Column("prezime"),
+            MaxLength(33),
             RegularExpression(@"^[АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШ][абвгдђежзијклљмнњопрстћуфхцчџш]+$",
                 ErrorMessage = "ERROR: Field prezime must be typed in Serbian Cyrilic script. First letter must be uppercase while all other must be lowercase."),
             Required,
@@ -38,28 +33,28 @@ namespace ServerApp.Models
         public DateTime DatumRodjenja { get; set; } = DateTime.Now;
 
         [Column("starost"), JsonPropertyName("starost")]
-        public int Starost {  get; set; }
+        public int Starost { get; set; }
 
-        [Column("jmbg"), 
-        StringLength(13), 
+        [Column("jmbg"),
+        StringLength(13),
         RegularExpression("^[0-9]{13}$",
             ErrorMessage = "ERROR: Field jmbg does not have 13 digits which values are from 0 to 9"),
         JsonPropertyName("jmbg")]
         public string Jmbg { get; set; } = string.Empty;
 
-        [Column("broj_telefona"), 
-         MaxLength(18), 
-         RegularExpression("^\\+381\\([1-9]{2}\\)[0-9]{5,10}$|^\\(0[1-9]{2}\\)[0-9]{5,10}$", 
+        [Column("broj_telefona"),
+         MaxLength(18),
+         RegularExpression("^\\+381\\([1-9]{2}\\)[0-9]{5,10}$|^\\(0[1-9]{2}\\)[0-9]{5,10}$",
             ErrorMessage = "ERROR: Field broj_telefona must contain format like (011)0123456789 or +381(63)12345"),
         JsonPropertyName("broj_telefona")]
         public string BrojTelefona { get; set; } = string.Empty;
 
-        [Column("rodno_mesto"),ForeignKey(nameof(Mesto)), JsonPropertyName("rodno_mesto")]
+        [Column("rodno_mesto"), ForeignKey(nameof(Mesto)), JsonPropertyName("rodno_mesto")]
         public long RodnoMesto { get; set; }
         [NotMapped, JsonPropertyName("prebivaliste")]
         public Mesto? Prebivaliste { get; set; } = new Mesto();
 
-        [NotMapped,JsonIgnore]
+        [NotMapped, JsonIgnore]
         public Mesto? RodnoMestoInstance { get; set; }
 
         [NotMapped, JsonIgnore]

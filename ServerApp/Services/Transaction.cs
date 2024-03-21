@@ -1,4 +1,7 @@
-﻿namespace ServerApp.Services
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
+
+namespace ServerApp.Services
 {
     public abstract class Transaction<T> : Service
     {
@@ -8,20 +11,20 @@
 
         public T Execute()
         {
-            using (var transaciton = dbContext.Database.BeginTransaction())
+            using var transaciton = dbContext.Database.BeginTransaction();
+            try
             {
-                /*try
-                {*/
-                    T result = Method();
-                    transaciton.Commit();
-                    return result;
-                /*}catch (Exception ex) 
-                { 
-                    transaciton.Rollback();
-                    throw ex;
-                }*/
+                T result = Method(transaciton);
+                transaciton.Commit();
+                return result;
+            }
+            catch (Exception)
+            {
+                transaciton.Rollback();
+                throw;
             }
         }
-        public abstract T Method();
+
+        public abstract T Method(IDbContextTransaction transaction);
     }
 }

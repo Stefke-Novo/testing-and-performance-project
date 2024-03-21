@@ -17,7 +17,8 @@ namespace ServerApp.Migrations
 								@datum_rodjenja date,
 								@jmbg nchar(13),
 								@broj_telefona nvarchar(18),
-								@rodno_mesto bigint
+								@rodno_mesto bigint,
+								@prebivaliste bigint
 							)
 							as
 							begin
@@ -32,11 +33,22 @@ namespace ServerApp.Migrations
 								if not exists(select * from mesto where mesto.m = @rodno_mesto)
 										throw 70001, 'ERROR: Typed birthplace doesn''t exist in system.',1;
 								begin try
+									declare @result table (o bigint,
+															ime nvarchar(33),
+															prezime nvarchar(33),
+															datum_rodjenja date,
+															starost int,
+															jmbg nchar(13),
+															broj_telefona nvarchar(18),
+															rodno_mesto bigint);
 									begin transaction
 										insert into osoba (ime, prezime, datum_rodjenja, jmbg, broj_telefona, rodno_mesto)
-												output inserted.o, inserted.ime, inserted.prezime, inserted.datum_rodjenja, inserted.jmbg, inserted.broj_telefona, inserted.rodno_mesto
+												output inserted.o, inserted.ime, inserted.prezime, inserted.datum_rodjenja, inserted.starost, inserted.jmbg, inserted.broj_telefona, inserted.rodno_mesto into @result
 													values (@ime,@prezime,@datum_rodjenja, @jmbg, @broj_telefona, @rodno_mesto);
+										if(@prebivaliste>0)
+											insert into prebivaliste (o,m) values ((select top 1 o from @result),@prebivaliste);
 									commit transaction;
+									select * from @result;
 								end try
 								begin catch
 									rollback transaction
@@ -56,37 +68,7 @@ namespace ServerApp.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            var command = @"drop procedure dbo.sp_osoba_insert_all
-							(
-								@ime nvarchar(33),
-								@prezime nvarchar(33),
-								@datum_rodjenja date,
-								@jmbg nchar(13),
-								@broj_telefona nvarchar(18),
-								@rodno_mesto bigint
-							)
-							as
-							begin
-								--null constraint
-								if @ime is null throw 70001, 'ERROR: field ime is null.',1;
-								if @prezime is null throw 70001, 'ERROR: field prezime is null.',1;
-								if @jmbg is null throw 70001, 'ERROR: field jmbg is null.',1;
-								if @rodno_mesto is null throw 70001, 'ERROR: field rodno_mesto is null.',1;
-								--specific constraints
-								if @datum_rodjenja<'1950-01-01' OR @datum_rodjenja>getdate() 
-									throw 70001, 'ERROR: Field datum_rodjenja must be between date 1.1.1950 and curent date.',1;
-								if not exists(select * from mesto where mesto.m = @rodno_mesto)
-										throw 70001, 'ERROR: Typed birthplace doesn''t exist in system.',1;
-								begin try
-									begin transaction
-										insert into osoba (ime, prezime, datum_rodjenja, jmbg, broj_telefona, rodno_mesto)
-													values (@ime,@prezime,@datum_rodjenja, @jmbg, @broj_telefona, @rodno_mesto);
-									commit transaction;
-								end try
-								begin catch
-									rollback transaction
-								end catch
-							end;";
+            var command = @"drop procedure dbo.sp_osoba_insert_all";
             migrationBuilder.Sql(command);
 			var command1 = @"
 			delete from mesto where ptt_broj like '24000';
