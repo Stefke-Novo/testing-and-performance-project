@@ -1,16 +1,12 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using ServerApp.Config;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace ServerApp.Models
 {
-    [PrimaryKey(nameof(O),nameof(M))]
-    [Table("prebivaliste")]
     [EntityTypeConfiguration(typeof(PrebivalisteConfiguration))]
-    [Index(nameof(O),IsUnique = true)]
     public class Prebivaliste
     {
         public Prebivaliste(long o, long m)
@@ -20,17 +16,14 @@ namespace ServerApp.Models
             OsobaInstance= new(){ O = o };
             MestoInstance= new(){ M = m };
         }
+        public long O { get; set; } = default;
 
-        [Column("o"),ForeignKey(nameof(Osoba))]
-        public long O { get; set; }
-
-        [Column("m"),ForeignKey(nameof(Mesto))]
-        public long M { get; set; }
+        public long M { get; set; } = default;
 
         [NotMapped, JsonIgnore]
-        public Osoba OsobaInstance { get; set; }
+        public Osoba OsobaInstance { get; set; } = null!;
 
         [NotMapped, JsonIgnore]
-        public Mesto MestoInstance { get; set; }
+        public Mesto MestoInstance { get; set; } = null!;
     }
 }

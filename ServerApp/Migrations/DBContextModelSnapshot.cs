@@ -17,7 +17,7 @@ namespace ServerApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -27,28 +27,33 @@ namespace ServerApp.Migrations
                     b.Property<long>("M")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("m");
+                        .HasColumnName("m")
+                        .HasAnnotation("Relational:JsonPropertyName", "m");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("M"));
 
                     b.Property<int>("BrojStanovnika")
                         .HasColumnType("int")
-                        .HasColumnName("broj_stanovnika");
+                        .HasColumnName("broj_stanovnika")
+                        .HasAnnotation("Relational:JsonPropertyName", "broj_stanovnika");
 
                     b.Property<string>("Naziv")
                         .IsRequired()
-                        .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
-                        .HasColumnName("naziv");
+                        .HasColumnName("naziv")
+                        .HasAnnotation("Relational:JsonPropertyName", "naziv");
 
                     b.Property<string>("PttBroj")
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)")
-                        .HasColumnName("ptt_broj");
+                        .IsRequired()
+                        .HasColumnType("nchar(5)")
+                        .HasColumnName("ptt_broj")
+                        .HasAnnotation("Relational:JsonPropertyName", "ptt_broj");
 
                     b.HasKey("M");
 
-                    b.ToTable("mesto", (string)null);
+                    b.ToTable("mesto");
+
+                    b.HasAnnotation("Relational:JsonPropertyName", "rodno_mesto");
                 });
 
             modelBuilder.Entity("ServerApp.Models.Osoba", b =>
@@ -56,54 +61,57 @@ namespace ServerApp.Migrations
                     b.Property<long>("O")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasColumnName("o");
+                        .HasColumnName("o")
+                        .HasAnnotation("Relational:JsonPropertyName", "o");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("O"));
 
                     b.Property<string>("BrojTelefona")
                         .IsRequired()
-                        .HasMaxLength(18)
                         .HasColumnType("nvarchar(18)")
-                        .HasColumnName("broj_telefona");
+                        .HasColumnName("broj_telefona")
+                        .HasAnnotation("Relational:JsonPropertyName", "broj_telefona");
 
                     b.Property<DateOnly>("DatumRodjenja")
                         .HasColumnType("date")
-                        .HasColumnName("datum_rodjenja");
+                        .HasColumnName("datum_rodjenja")
+                        .HasAnnotation("Relational:JsonPropertyName", "datum_rodjenja");
 
                     b.Property<string>("Ime")
                         .IsRequired()
                         .HasMaxLength(33)
                         .HasColumnType("nvarchar(33)")
-                        .HasColumnName("ime");
+                        .HasColumnName("ime")
+                        .HasAnnotation("Relational:JsonPropertyName", "ime");
 
                     b.Property<string>("Jmbg")
                         .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)")
-                        .HasColumnName("jmbg");
+                        .HasColumnType("nchar(13)")
+                        .HasColumnName("jmbg")
+                        .HasAnnotation("Relational:JsonPropertyName", "jmbg");
 
                     b.Property<string>("Prezime")
                         .IsRequired()
                         .HasMaxLength(33)
                         .HasColumnType("nvarchar(33)")
-                        .HasColumnName("prezime");
+                        .HasColumnName("prezime")
+                        .HasAnnotation("Relational:JsonPropertyName", "prezime");
 
                     b.Property<long>("RodnoMesto")
                         .HasColumnType("bigint")
-                        .HasColumnName("rodno_mesto");
+                        .HasColumnName("rodno_mesto")
+                        .HasAnnotation("Relational:JsonPropertyName", "rodno_mesto_id");
 
                     b.Property<int>("Starost")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("int")
                         .HasColumnName("starost")
-                        .HasComputedColumnSql("datediff(month,[datum_rodjenja,getdate()])");
+                        .HasComputedColumnSql("datediff(month,[datum_rodjenja],getdate())")
+                        .HasAnnotation("Relational:JsonPropertyName", "starost");
 
                     b.HasKey("O");
 
                     b.HasIndex("Jmbg")
-                        .IsUnique();
-
-                    b.HasIndex("O")
                         .IsUnique();
 
                     b.HasIndex("RodnoMesto");
@@ -125,16 +133,21 @@ namespace ServerApp.Migrations
 
                     b.HasIndex("M");
 
+                    b.HasIndex("O")
+                        .IsUnique();
+
                     b.ToTable("prebivaliste", (string)null);
                 });
 
             modelBuilder.Entity("ServerApp.Models.Osoba", b =>
                 {
-                    b.HasOne("ServerApp.Models.Mesto", null)
-                        .WithMany()
+                    b.HasOne("ServerApp.Models.Mesto", "Mesto")
+                        .WithMany("Osobe")
                         .HasForeignKey("RodnoMesto")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Mesto");
                 });
 
             modelBuilder.Entity("ServerApp.Models.Prebivaliste", b =>
@@ -150,6 +163,11 @@ namespace ServerApp.Migrations
                         .HasForeignKey("O")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ServerApp.Models.Mesto", b =>
+                {
+                    b.Navigation("Osobe");
                 });
 #pragma warning restore 612, 618
         }

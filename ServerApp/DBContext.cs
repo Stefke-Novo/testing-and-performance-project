@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ServerApp.Config;
 
 namespace ServerApp
 {
@@ -23,11 +24,9 @@ namespace ServerApp
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*MethodInfo result = typeof(DBContext).GetMethod(nameof(SPOsobaInsert), new[] { typeof(string), typeof(string), typeof(DateTime), typeof(string), typeof(string), typeof(long), typeof(long) }) ?? throw new Exception("Method info is not initialized.");
-            modelBuilder.HasDbFunction(result).HasName("sp_osoba_insert");*/
-            /*modelBuilder.Ignore<Mesto>();
-            modelBuilder.Entity<Osoba>().OwnsOne<Mesto>(o => o.RodnoMestoInstance);*/
-            modelBuilder.Entity<Osoba>().HasKey(o => o.O);
+            modelBuilder.ApplyConfiguration(new OsobaConfiguration());
+            modelBuilder.ApplyConfiguration(new MestoConfiguration());
+            modelBuilder.ApplyConfiguration(new PrebivalisteConfiguration());
         }
     }
 

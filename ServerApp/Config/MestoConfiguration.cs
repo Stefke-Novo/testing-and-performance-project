@@ -8,8 +8,28 @@ namespace ServerApp.Config
     {
         public void Configure(EntityTypeBuilder<Mesto> builder)
         {
-            builder.HasMany<Prebivaliste>().WithOne().HasForeignKey(p=>p.M).OnDelete(DeleteBehavior.Restrict);
-            builder.HasMany<Osoba>().WithOne().HasForeignKey(o=>o.RodnoMesto).OnDelete(DeleteBehavior.Restrict);
+            builder.Property<long>(m => m.M).
+                HasColumnName("m").
+                HasColumnType("bigint").
+                ValueGeneratedOnAdd().
+                HasJsonPropertyName("m");
+            builder.HasKey(m => m.M);
+            builder.Property(m => m.PttBroj).
+                HasColumnName("ptt_broj").
+                HasColumnType("nchar(5)").
+                IsRequired().
+                HasJsonPropertyName("ptt_broj");
+            builder.Property(m => m.Naziv).
+                HasColumnType("nvarchar(20)").
+                HasColumnName("naziv").
+                HasJsonPropertyName("naziv").
+                IsRequired();
+            builder.Property(m => m.BrojStanovnika).
+                HasColumnName("broj_stanovnika").
+                HasColumnType("int").
+                HasJsonPropertyName("broj_stanovnika").
+                IsRequired();
+            builder.HasMany(m => m.Osobe).WithOne(o => o.Mesto).HasForeignKey(m => m.RodnoMesto);
         }
     }
 }

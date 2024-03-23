@@ -5,7 +5,7 @@
 namespace ServerApp.Migrations
 {
     /// <inheritdoc />
-    public partial class ConstraintsMigraion : Migration
+    public partial class ConstraintsMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +20,8 @@ namespace ServerApp.Migrations
 
             //Check constraints
             migrationBuilder.AddCheckConstraint("CK_osoba_datum_rodjenja", "osoba", "datum_rodjenja<getdate() and datum_rodjenja>='1950-01-01'");
+
+            
         }
 
         /// <inheritdoc />

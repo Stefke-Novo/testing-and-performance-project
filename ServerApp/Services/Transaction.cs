@@ -14,7 +14,7 @@ namespace ServerApp.Services
             using var transaciton = dbContext.Database.BeginTransaction();
             try
             {
-                T result = Method(transaciton);
+                T result = Method();
                 transaciton.Commit();
                 return result;
             }
@@ -25,6 +25,6 @@ namespace ServerApp.Services
             }
         }
 
-        public abstract T Method(IDbContextTransaction transaction);
+        public abstract T Method();
     }
 }

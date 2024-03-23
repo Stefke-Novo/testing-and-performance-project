@@ -4,17 +4,17 @@ using ServerApp.Models;
 
 namespace ServerApp.Services.OsobaServices
 {
-    public class DeleteOsobaService : OsobaInfoService
+    public class DeleteOsobaService : OsobaInfoService<Osoba>
     {
         public DeleteOsobaService(DBContext context) : base(context)
         {
         }
 
-        public Osoba Method()
+        public override Osoba Method()
         {
             _osoba.Prebivaliste ??= new Mesto();
-            dbContext.Database.SqlQuery<Osoba>($"exec sp_osoba_delete @o={_osoba.O}, @prebivaliste={_osoba.Prebivaliste.M}").IgnoreQueryFilters();
-            return _osoba;
+            Osoba result = dbContext.Osobe.FromSql($"exec sp_osoba_delete @o={_osoba.O}, @prebivaliste={_osoba.Prebivaliste.M}").AsEnumerable().Single();
+            return result;
         }
     }
 }

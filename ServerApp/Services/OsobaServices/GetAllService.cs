@@ -4,7 +4,7 @@ using ServerApp.Models;
 
 namespace ServerApp.Services.OsobaServices
 {
-    public class GetAllService : OsobaInfoService
+    public class GetAllService : OsobaInfoService<Osoba>
     {
         
 
@@ -14,9 +14,9 @@ namespace ServerApp.Services.OsobaServices
             return dbContext.Osobe.ToList();
         }
 
-        /*public override Osoba Method(IDbContextTransaction transaction)
+        public override Osoba Method()
         {
             throw new NotImplementedException();
-        }*/
+        }
     }
 }

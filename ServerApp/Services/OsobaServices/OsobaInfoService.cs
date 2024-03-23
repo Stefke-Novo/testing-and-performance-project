@@ -2,7 +2,7 @@
 
 namespace ServerApp.Services.OsobaServices
 {
-    public abstract class OsobaInfoService : Service
+    public abstract class OsobaInfoService<T> : Transaction<T>
     {
         protected Osoba _osoba = new();
         protected OsobaInfoService(DBContext context) : base(context)
