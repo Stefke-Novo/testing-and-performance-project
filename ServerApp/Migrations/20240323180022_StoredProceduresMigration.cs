@@ -111,10 +111,23 @@ namespace ServerApp.Migrations
                                     throw 70001, 'ERROR: Residence is not registered in system. Please, check support.',1;
                                 begin try
                                     begin transaction
+                                    declare @result table 
+	                                                    (
+		                                                    o bigint,
+		                                                    ime nvarchar(33),
+		                                                    prezime nvarchar(33),
+		                                                    datum_rodjenja date,
+                                                            starost int,
+		                                                    jmbg nchar(13),
+		                                                    broj_telefona nvarchar(18),
+		                                                    rodno_mesto bigint
+	                                                    );
+                                    insert into @result select * from osoba where osoba.o=@o;
                                         if @prebivaliste>0
                                             delete from prebivaliste where o=@o and m=@prebivaliste;
                                         delete from osoba where osoba.o = @o;
-                                    commit transaction
+                                    commit transaction;
+                                    select * from @result;
                                 end try 
                                 begin catch
                                     rollback transaction;
