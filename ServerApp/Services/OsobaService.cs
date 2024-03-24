@@ -5,31 +5,38 @@ namespace ServerApp.Services
 {
     public class OsobaService : Service
     {
-        public OsobaService(DBContext context) : base(context) { }
-
-       /* public List<Osoba> GetAll()
+        private readonly InsertOsobaService _insertOsobaService;
+        private readonly UpdateOsobaService _updateOsobaService;
+        private readonly DeleteOsobaService _deleteOsobaService;
+        private readonly GetAllService _getAllService;
+        public OsobaService(DBContext context) : base(context) 
         {
-            return new GetAllService(dbContext).GetAll();
-        }*/
+            this._insertOsobaService = new(context);
+            this._getAllService = new(context);
+            this._updateOsobaService = new(context);
+            this._deleteOsobaService = new(context);
+        }
+
+        public List<Osoba> GetAll()
+        {
+            return _getAllService.GetAll();
+        }
 
         public Osoba Insert(Osoba o)
         {
-            InsertOsobaService s = new(dbContext) { Osoba = o };
-            return s.Method();
+            _insertOsobaService.Osoba = o;
+            return _insertOsobaService.Execute();
         }
-        /*public Osoba Update(Osoba o)
+        public Osoba Update(Osoba o)
         {
-            UpdateOsobaService s = new(dbContext) { Osoba = o };
-            //return s.Execute();
-            return o;
+            _updateOsobaService.Osoba = o;
+            return _updateOsobaService.Execute();
         }
         public String Delete(Osoba o)
         {
-            DeleteOsobaService s = new(dbContext) { Osoba = o };
-            //s.Execute();
-            //return $"User with id {s.Osoba.O} is successfully deleted.";
-            return "";
-
-        }*/
+            _deleteOsobaService.Osoba = o;
+            _deleteOsobaService.Execute();
+            return $"User with id {o.O} is successfully deleted.";
+        }
     }
 }

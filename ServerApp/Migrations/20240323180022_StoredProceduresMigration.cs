@@ -28,7 +28,7 @@ namespace ServerApp.Migrations
 		                        if @jmbg is null throw 70001, 'ERROR: field jmbg is null.',1;
 		                        if @rodno_mesto is null throw 70001, 'ERROR: field rodno_mesto is null.',1;
 		                        --specific constraints
-                                if @jmbg exists(select o.jmbg from osoba o where o.jmbg like @jmbg)
+                                if exists(select o.jmbg from osoba o where o.jmbg like @jmbg)
                                     throw 70001, 'ERROR: Person with the jmbg is already registered.',1;
 		                        if @datum_rodjenja<'1950-01-01' OR @datum_rodjenja>getdate() 
 			                        throw 70001, 'ERROR: Field datum_rodjenja must be between date 1.1.1950 and curent date.',1;
@@ -81,14 +81,16 @@ namespace ServerApp.Migrations
                                     --value constraints
                                     if not exists(select * from mesto where mesto.m=@rodno_mesto)
                                             throw 70001,'ERROR: Birthplace for the user is not registered. Plseace contact supprot.',1;
+                                    if @prebivaliste>0 and not exists(select * from mesto where mesto.m = @prebivaliste)
+                                            throw 70001, 'ERROR: Residence is not registered. Plseace check support.',1;
                                     begin try
                                         begin transaction
                                                 update osoba set ime=@ime, prezime=@prezime, jmbg=@jmbg, @broj_telefona=broj_telefona, datum_rodjenja=datum_rodjenja, rodno_mesto = @rodno_mesto where osoba.o = @o;
-                                                if @prebivaliste>0 and not exists(select * from mesto where mesto.m = @prebivaliste)
-                                                    throw 70001, 'ERROR: Residence is not registered. Plseace check support.',1;
+                                                
                                                 if @prebivaliste>0
                                                     update prebivaliste set m=@prebivaliste where o=@o;
                                         commit transaction
+                                        select * from osoba where osoba.o=@o;
                                     end try
                                     begin catch
                                         rollback transaction;

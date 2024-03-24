@@ -1,5 +1,3 @@
-using ServerApp.Services;
-
 namespace Test
 {
     public class UnitTest1
@@ -7,7 +5,7 @@ namespace Test
         [Fact]
         public void Test1()
         {
-            
+
         }
     }
 }

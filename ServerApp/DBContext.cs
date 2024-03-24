@@ -9,18 +9,10 @@ namespace ServerApp
 {
     public class DBContext : DbContext
     {
-        public DBContext() : base() { }
-        public DBContext(DbContextOptions<DBContext> options) : base(options) {
-        }
-        public DbSet<Osoba> Osobe { get; set; }
-        public DbSet<Mesto> Mesta { get; set; }
-        public DbSet<Prebivaliste> Prebivalista { get; set; }
-
-        /*[DbFunction(Name ="sp_osoba_insert")]
-        public virtual IQueryable<Osoba> SPOsobaInsert(string ime, string prezime, DateTime datum_rodjenja, string jmbg, string broj_telefona, long rodno_mesto, long prebivaliste)
-        {
-            return FromExpression(() => SPOsobaInsert(ime, prezime, datum_rodjenja, jmbg, broj_telefona, rodno_mesto, prebivaliste));
-        }*/
+        public DBContext(DbContextOptions<DBContext> options) : base(options) {}
+        public virtual DbSet<Osoba> Osobe { get; set; }
+        public virtual DbSet<Mesto> Mesta { get; set; }
+        public virtual DbSet<Prebivaliste> Prebivalista { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
