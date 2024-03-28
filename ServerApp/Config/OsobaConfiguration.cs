@@ -34,7 +34,7 @@ namespace ServerApp.Config
                 IsRequired().
                 HasJsonPropertyName("prezime");
             //DatumRodjenja column
-            builder.Property<DateOnly>(o => o.DatumRodjenja).
+            builder.Property<DateTime>(o => o.DatumRodjenja).
                 HasColumnName("datum_rodjenja").
                 HasColumnType("date").
                 HasJsonPropertyName("datum_rodjenja");

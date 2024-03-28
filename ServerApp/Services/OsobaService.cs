@@ -17,9 +17,9 @@ namespace ServerApp.Services
             this._deleteOsobaService = new(context);
         }
 
-        public List<Osoba> GetAll()
+        public List<Osoba> GetAll(int index, int size)
         {
-            return _getAllService.GetAll();
+            return _getAllService.GetAll(index, size);
         }
 
         public Osoba Insert(Osoba o)

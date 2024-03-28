@@ -12,7 +12,7 @@ namespace ServerApp.Models
     {
         public Osoba() { }
 
-        public Osoba(long o, string ime, string prezime, DateOnly datumRodjenja, string jmbg, string brojTelefona, long rodnoMesto, long prebivaliste) : this()
+        public Osoba(long o, string ime, string prezime, DateTime datumRodjenja, string jmbg, string brojTelefona, long rodnoMesto, long prebivaliste) : this()
         {
             this.O = o;
             this.Ime = ime;
@@ -33,7 +33,7 @@ namespace ServerApp.Models
         [RegularExpression(@"^[АБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШ][абвгдђежзијклљмнњопрстћуфхцчџш]+$",
             ErrorMessage = "ERROR: Field prezime must be typed in Serbian Cyrilic script. First letter must be uppercase while all other must be lowercase.")]
         public string Prezime { get; set; } = string.Empty;
-        public DateOnly DatumRodjenja { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateTime DatumRodjenja { get; set; } = DateTime.Now;
         public int Starost { get; set; }
 
         [RegularExpression("^[0-9]{13}$",
@@ -44,12 +44,13 @@ namespace ServerApp.Models
             ErrorMessage = "ERROR: Field broj_telefona must contain format like (011)0123456789 or +381(63)12345")]
         public string BrojTelefona { get; set; } = string.Empty;
 
+        [JsonPropertyName("rodno_mesto_id")]
         public long RodnoMesto { get; set; }
 
         [NotMapped, JsonPropertyName("prebivaliste")]
         public Mesto Prebivaliste { get; set; } = new();
 
-        [JsonPropertyName("rodno_mesto")]
+        [JsonPropertyName("rodnoMesto")]
         public Mesto Mesto { get; set; } = new();
 
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServerApp.Models;
+using ServerApp.Services;
 
 namespace ServerApp.Controllers
 {
@@ -8,11 +9,16 @@ namespace ServerApp.Controllers
     [Produces("application/json")]
     public class MestoController : Controller
     {
-        [Route("/index")]
+        private readonly MestoService mestoService;
+        public MestoController(MestoService mestoService)
+        {
+            this.mestoService = mestoService;
+        }
+        [Route("all")]
         [HttpGet]
         public ObjectResult Index()
         {
-            return new ObjectResult(new List<string>() { "Mika", "Zika", "Pera" });
+            return Ok(this.mestoService.GetAll());
         }
     }
 }

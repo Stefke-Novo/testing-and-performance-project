@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using ServerApp.Models;
 using ServerApp.Services;
 
@@ -7,17 +8,18 @@ namespace ServerApp.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
+    [EnableCors("GeneralPolicy")]
     public class OsobaController : Controller
     {
         private readonly OsobaService osobaService;
         public OsobaController(OsobaService service) { this.osobaService = service; }
 
-        /*[HttpGet]
+        [HttpGet]
         [Route("all")]
-        public ObjectResult GetAll()
+        public ObjectResult GetAll(int index, int size)
         {
-            return new ObjectResult(osobaService.GetAll());
-        }*/
+            return new ObjectResult(osobaService.GetAll(index,size));
+        }
         [HttpPost]
         [Route("insert")]
         public ObjectResult Insert(Osoba osoba)
@@ -27,12 +29,13 @@ namespace ServerApp.Controllers
                 Osoba result = osobaService.Insert(osoba);
                 return Ok(result);
             }
-            catch (Exception)
-            { //return BadRequest(ex.Message); }
-                throw;
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message); 
             }
+              
         }
-        /*[HttpPut]
+        [HttpPut]
         [Route("update")]
         public ObjectResult Update(Osoba osoba)
         {
@@ -40,7 +43,7 @@ namespace ServerApp.Controllers
             {
                 return Ok(osobaService.Update(osoba));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -53,10 +56,10 @@ namespace ServerApp.Controllers
             {
                 return Ok(osobaService.Delete(osoba));
             }
-            catch( Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }*/
+        }
     }
 }
